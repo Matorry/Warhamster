@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String                    @id @default(cuid())
+  userName         String                    @unique
+  email            String                    @unique
+  pswd             String
+  role             Role                      @default(user)
+  birthDate        DateTime
+  createdAt        DateTime                  @default(now())
+  updatedAt        DateTime                  @updatedAt
+  armyLists        ArmyList[]                @relation("UserArmys")
+  userMatchLists   MatchParticipant[]        @relation("UserMatchs")
+  tournaments      TournamentParticipant[]   @relation("TournamentUser")
+}
+
+enum Role {
+  admin
+  user
+}
+
+model ArmyList {
+  id              String                     @id @default(cuid())
+  name            String
+  roster          String
+  faction         String
+  subFaction      String
+  owner           User                       @relation("UserArmys", fields: [ownerId], references: [id])
+  ownerId         String
+  armyMatchLists  MatchParticipant[]         @relation("ArmyMatchs")
+  tournamentLists TournamentParticipant[]    @relation("TournamentArmy")
+  createdAt       DateTime                   @default(now())
+  updatedAt       DateTime                   @updatedAt
+}
+
+model MatchParticipant {
+  id               String         @id @default(cuid())
+  user             User           @relation("UserMatchs", fields: [userId], references: [id])
+  userId           String
+  army             ArmyList       @relation("ArmyMatchs", fields: [armyId], references: [id])
+  armyId           String
+  match            Match          @relation("MatchParticipant", fields: [matchId], references: [id])
+  matchId          String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+}
+
+model Match {
+  id                String               @id @default(cuid())
+  date              DateTime
+  result            String
+  details           String
+  participants      MatchParticipant[]   @relation("MatchParticipant")
+  tournament        Tournament?          @relation("TournamentMatchs", fields: [tournamentId], references: [id])
+  tournamentId      String?
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+model Tournament {
+  id                String                   @id @default(cuid())
+  name              String
+  description       String
+  startDate         DateTime
+  endDate           DateTime
+  result            String
+  details           String
+  participants      TournamentParticipant[]  @relation("TournamentParticipants")
+  matches           Match[]                  @relation("TournamentMatchs")
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+}
+
+model TournamentParticipant {
+  id            String      @id @default(cuid())
+  user          User        @relation("TournamentUser", fields: [userId], references: [id])
+  userId        String
+  armyList      ArmyList    @relation("TournamentArmy", fields: [armyListId], references: [id])
+  armyListId    String
+  tournament    Tournament  @relation("TournamentParticipants", fields: [tournamentId], references: [id])
+  tournamentId  String
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
