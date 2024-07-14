@@ -1,8 +1,8 @@
 import { PrismaClient, Tournament } from '@prisma/client';
 import createDebug from 'debug';
-import { TournamentCreateDto, TournamentUpdateDto } from '../entities/tournament';
-import { HttpError } from '../middleware/errors.middleware';
-import { Repo } from './type.repo';
+import { TournamentCreateDto, TournamentUpdateDto } from '../entities/tournament.js';
+import { HttpError } from '../middleware/errors.middleware.js';
+import { Repo } from './type.repo.js';
 
 const debug = createDebug('TFD:tournaments:repository');
 

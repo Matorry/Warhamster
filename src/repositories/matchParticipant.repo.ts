@@ -1,8 +1,8 @@
 import { MatchParticipant, PrismaClient } from '@prisma/client';
 import createDebug from 'debug';
-import { MatchParticipantCreateDto, MatchParticipantUpdateDto } from '../entities/matchParticipant';
-import { HttpError } from '../middleware/errors.middleware';
-import { Repo } from './type.repo';
+import { MatchParticipantCreateDto, MatchParticipantUpdateDto } from '../entities/matchParticipant.js';
+import { HttpError } from '../middleware/errors.middleware.js';
+import { Repo } from './type.repo.js';
 
 const debug = createDebug('TFD:matchParticipant:repository');
 
