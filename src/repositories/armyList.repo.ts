@@ -62,7 +62,6 @@ export class ArmyListRepo implements Repo<ArmyList, ArmyListCreateDto> {
   }
 
   async create(data: ArmyListCreateDto) {
-    console.log('data', data);
 
     const newArmyList = this.prisma.armyList.create({
       data,
