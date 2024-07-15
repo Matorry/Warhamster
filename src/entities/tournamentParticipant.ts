@@ -5,8 +5,8 @@ import { User } from "./user.js";
 export type TournamentParticipant = {
   id: string;
   user: User;
-  armyList?: ArmyList;
-  tournament: Tournament;
+  armyList: ArmyList;
+  tournament?: Tournament;
   createdAt: Date;
   updatedAt: Date;
 };

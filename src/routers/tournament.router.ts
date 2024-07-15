@@ -35,6 +35,12 @@ export class TournamentRouter {
       controller.delete.bind(controller)
     );
 
+    this.router.post('/:id/roundrobin',
+      authInterceptor.authentication.bind(authInterceptor),
+      controller.createRoundRobinMatches.bind(controller)
+    );
+
+
     // TournamentParticipant
     this.router.post(
       '/:id/participants',

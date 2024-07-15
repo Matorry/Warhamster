@@ -6,6 +6,7 @@ import { tournamentCreateDtoSchema, tournamentUpdateDtoSchema } from '../entitie
 import { TournamentParticipantCreateDto, TournamentParticipantUpdateDto } from '../entities/tournamentParticipant.js';
 import { TournamentRepo } from '../repositories/tournament.repo.js';
 import { TournamentParticipantRepo } from '../repositories/tournamentParticipant.repo.js';
+import { RoundRobinService } from '../services/roundRobin.service.js';
 import { BaseController } from './base.controller.js';
 
 const debug = createDebug('TFD:users:controller');
@@ -14,7 +15,9 @@ export class TournamentController extends BaseController<Tournament, TournamentC
   constructor(
     protected readonly repo: TournamentRepo,
     // eslint-disable-next-line no-unused-vars
-    private readonly participantRepo: TournamentParticipantRepo
+    private readonly participantRepo: TournamentParticipantRepo,
+    // eslint-disable-next-line no-unused-vars
+    private readonly roundRobinService: RoundRobinService
   ) {
     super(repo, tournamentCreateDtoSchema, tournamentUpdateDtoSchema);
     debug('Instantiated users controller');
@@ -52,6 +55,16 @@ export class TournamentController extends BaseController<Tournament, TournamentC
     try {
       const result = await this.participantRepo.delete(id);
       res.json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async createRoundRobinMatches(req: Request, res: Response, next: NextFunction) {
+    const { id } = req.params;
+    try {
+      const matches = await this.roundRobinService.createRoundRobinMatches(id);
+      res.status(201).json(matches);
     } catch (error) {
       next(error);
     }

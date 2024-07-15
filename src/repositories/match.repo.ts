@@ -76,6 +76,13 @@ export class MatchRepo implements Repo<Match, MatchCreateDto> {
     return newMatch;
   }
 
+  async createMany(matches: MatchCreateDto[]): Promise<Match[]> {
+    const createdMatches = await this.prisma.$transaction(
+      matches.map(match => this.prisma.match.create({ data: match, select }))
+    );
+    return createdMatches;
+  }
+
   async update(id: string, data: MatchUpdateDto): Promise<Match> {
     const match = await this.prisma.match.findUnique({
       where: { id },

@@ -1,6 +1,6 @@
-import { PrismaClient, Tournament } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import createDebug from 'debug';
-import { TournamentCreateDto, TournamentUpdateDto } from '../entities/tournament.js';
+import { Tournament, TournamentCreateDto, TournamentUpdateDto } from '../entities/tournament.js';
 import { HttpError } from '../middleware/errors.middleware.js';
 import { Repo } from './type.repo.js';
 
@@ -19,11 +19,15 @@ const select = {
   participants: {
     select: {
       id: true,
+      createdAt: false,
+      updatedAt: false,
       user: {
         select: {
           id: true,
           userName: true,
           email: true,
+          role: false,
+          birthDate: false
         },
       },
       armyList: {
@@ -32,6 +36,9 @@ const select = {
           name: true,
           faction: true,
           subFaction: true,
+          roster: true,
+          createdAt: false,
+          updatedAt: false
         },
       },
     },
@@ -42,6 +49,8 @@ const select = {
       date: true,
       result: true,
       details: true,
+      createdAt: false,
+      updatedAt: false
     },
   },
 };
