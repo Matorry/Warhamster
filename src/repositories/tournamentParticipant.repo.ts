@@ -20,6 +20,7 @@ const select = {
       id: true,
       name: true,
       faction: true,
+      subFaction: true,
     },
   },
   tournament: {
@@ -40,7 +41,7 @@ const select = {
 export class TournamentParticipantRepo implements Repo<TournamentParticipant, TournamentParticipantCreateDto> {
   // eslint-disable-next-line no-unused-vars
   constructor(private readonly prisma: PrismaClient) {
-    debug('Instantiated matchParticipant repository');
+    debug('Instantiated tournamentParticipant repository');
   }
 
   async readAll() {

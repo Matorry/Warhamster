@@ -20,7 +20,9 @@ export class MatchController extends BaseController<Match, MatchCreateDto, Match
   }
 
   async addParticipant(req: Request, res: Response, next: NextFunction) {
-    const data: MatchParticipantCreateDto = req.body;
+    const { id } = req.params;
+    const { userId, armyId } = req.body
+    const data: MatchParticipantCreateDto = { userId, armyId, matchId: id };
 
     try {
       const result = await this.participantRepo.create(data);
@@ -32,10 +34,11 @@ export class MatchController extends BaseController<Match, MatchCreateDto, Match
 
   async updateParticipant(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const data: MatchParticipantUpdateDto = req.body;
+    const { payload, ...data } = req.body;
+    const updateData: MatchParticipantUpdateDto = data;
 
     try {
-      const result = await this.participantRepo.update(id, data);
+      const result = await this.participantRepo.update(id, updateData);
       res.json(result);
     } catch (error) {
       next(error);

@@ -19,8 +19,21 @@ const select = {
   participants: {
     select: {
       id: true,
-      userName: true,
-      email: true,
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          email: true,
+        },
+      },
+      armyList: {
+        select: {
+          id: true,
+          name: true,
+          faction: true,
+          subFaction: true,
+        },
+      },
     },
   },
   matches: {

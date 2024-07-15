@@ -20,6 +20,7 @@ const select = {
       id: true,
       name: true,
       faction: true,
+      subFaction: true,
     },
   },
   match: {
@@ -28,8 +29,6 @@ const select = {
       date: true,
       result: true,
       details: true,
-      createdAt: false,
-      updatedAt: false
     },
   },
   createdAt: true,

@@ -14,11 +14,32 @@ const select = {
   createdAt: true,
   updatedAt: true,
   tournamentId: false,
+  tournament: {
+    select: {
+      id: true,
+      name: true,
+      startDate: true,
+      endDate: true,
+    },
+  },
   participants: {
     select: {
       id: true,
-      userId: true,
-      armyId: true,
+      user: {
+        select: {
+          id: true,
+          userName: true,
+          email: true,
+        },
+      },
+      army: {
+        select: {
+          id: true,
+          name: true,
+          faction: true,
+          subFaction: true,
+        },
+      },
     },
   },
 };

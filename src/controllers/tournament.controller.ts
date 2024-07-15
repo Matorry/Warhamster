@@ -21,7 +21,9 @@ export class TournamentController extends BaseController<Tournament, TournamentC
   }
 
   async addParticipant(req: Request, res: Response, next: NextFunction) {
-    const data: TournamentParticipantCreateDto = req.body;
+    const { id } = req.params;
+    const { userId, armyListId } = req.body
+    const data: TournamentParticipantCreateDto = { userId, armyListId, tournamentId: id };
 
     try {
       const result = await this.participantRepo.create(data);
@@ -33,10 +35,11 @@ export class TournamentController extends BaseController<Tournament, TournamentC
 
   async updateParticipant(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
-    const data: TournamentParticipantUpdateDto = req.body;
+    const { payload, ...data } = req.body;
+    const updateData: TournamentParticipantUpdateDto = data;
 
     try {
-      const result = await this.participantRepo.update(id, data);
+      const result = await this.participantRepo.update(id, updateData);
       res.json(result);
     } catch (error) {
       next(error);
