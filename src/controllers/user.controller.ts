@@ -1,11 +1,7 @@
-/* eslint-disable no-unused-vars */
 import createDebug from 'debug';
 import { type NextFunction, type Request, type Response } from 'express';
 import { type User, type UserCreateDto, type UserUpdateDto } from '../entities/user';
-import {
-  userCreateDtoSchema,
-  userUpdateDtoSchema,
-} from '../entities/user.schema.js';
+import { userCreateDtoSchema, userUpdateDtoSchema } from '../entities/user.schema.js';
 import { HttpError } from '../middleware/errors.middleware.js';
 import { type WithLoginRepo } from '../repositories/type.repo.js';
 import { Auth } from '../services/auth.service.js';
@@ -13,27 +9,19 @@ import { BaseController } from './base.controller.js';
 const debug = createDebug('TFD:users:controller');
 
 export class UserController extends BaseController<User, UserCreateDto, UserUpdateDto> {
-  constructor(protected readonly repo: WithLoginRepo<User, UserCreateDto>) {
+  private static instance: UserController;
+
+  private constructor(protected readonly repo: WithLoginRepo<User, UserCreateDto>) {
     super(repo, userCreateDtoSchema, userUpdateDtoSchema);
     debug('Instantiated users controller');
   }
 
-  async getAll(req: Request, res: Response, next: NextFunction) {
-    try {
-      const { query } = req;
-      console.log(query);
-
-      let results;
-      if (query && typeof query.username === 'string') {
-        results = await this.repo.searchByUsername(query.username);
-      } else {
-        results = await this.repo.readAll();
-      }
-
-      res.json(results);
-    } catch (error) {
-      res.status(500).send(error);
+  static getInstance(repo: WithLoginRepo<User, UserCreateDto>) {
+    if (!UserController.instance) {
+      UserController.instance = new UserController(repo);
     }
+
+    return UserController.instance;
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
@@ -113,7 +101,6 @@ export class UserController extends BaseController<User, UserCreateDto, UserUpda
 
     Object.keys(req.body as User).forEach((key) => {
       if (allowedFields.includes(key)) {
-
         filteredBody[key as keyof Partial<User>] = req.body[key as keyof User];
       }
     });

@@ -12,7 +12,9 @@ import { BaseController } from './base.controller.js';
 const debug = createDebug('TFD:users:controller');
 
 export class TournamentController extends BaseController<Tournament, TournamentCreateDto, TournamentUpdateDto> {
-  constructor(
+  private static instance: TournamentController;
+
+  private constructor(
     protected readonly repo: TournamentRepo,
     // eslint-disable-next-line no-unused-vars
     private readonly participantRepo: TournamentParticipantRepo,
@@ -20,7 +22,15 @@ export class TournamentController extends BaseController<Tournament, TournamentC
     private readonly roundRobinService: RoundRobinService
   ) {
     super(repo, tournamentCreateDtoSchema, tournamentUpdateDtoSchema);
-    debug('Instantiated users controller');
+    debug('Instantiated tournament controller');
+  }
+
+  static getInstance(repo: TournamentRepo, participantRepo: TournamentParticipantRepo, roundRobinService: RoundRobinService) {
+    if (!TournamentController.instance) {
+      TournamentController.instance = new TournamentController(repo, participantRepo, roundRobinService);
+    }
+
+    return TournamentController.instance;
   }
 
   async addParticipant(req: Request, res: Response, next: NextFunction) {

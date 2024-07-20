@@ -10,13 +10,23 @@ import { BaseController } from './base.controller.js';
 const debug = createDebug('TFD:match:controller');
 
 export class MatchController extends BaseController<Match, MatchCreateDto, MatchUpdateDto> {
-  constructor(
+  private static instance: MatchController;
+
+  private constructor(
     protected readonly repo: MatchRepo,
     // eslint-disable-next-line no-unused-vars
     private readonly participantRepo: MatchParticipantRepo
   ) {
     super(repo, matchCreateDtoSchema, matchUpdateDtoSchema);
     debug('Instantiated match controller');
+  }
+
+  static getInstance(repo: MatchRepo, participantRepo: MatchParticipantRepo) {
+    if (!MatchController.instance) {
+      MatchController.instance = new MatchController(repo, participantRepo);
+    }
+
+    return MatchController.instance;
   }
 
   async addParticipant(req: Request, res: Response, next: NextFunction) {

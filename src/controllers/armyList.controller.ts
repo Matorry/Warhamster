@@ -9,9 +9,19 @@ import { BaseController } from './base.controller.js';
 const debug = createDebug('TFD:users:controller');
 
 export class ArmyListController extends BaseController<ArmyList, ArmyListCreateDto, ArmyListUpdateDto> {
-  constructor(protected readonly repo: ArmyListRepo) {
+  private static instance: ArmyListController;
+
+  private constructor(protected readonly repo: ArmyListRepo) {
     super(repo, armyListCreateDtoSchema, armyListUpdateDtoSchema);
-    debug('Instantiated users controller');
+    debug('Instantiated army list controller');
+  }
+
+  static getInstance(repo: ArmyListRepo) {
+    if (!ArmyListController.instance) {
+      ArmyListController.instance = new ArmyListController(repo);
+    }
+
+    return ArmyListController.instance;
   }
 
   async readByOwner(req: Request, res: Response, next: NextFunction) {
