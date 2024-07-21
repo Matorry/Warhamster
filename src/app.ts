@@ -38,7 +38,7 @@ export const startApp = (app: Express, prisma: PrismaClient) => {
   const usersRepo = new UserRepo(prisma);
   const usersController = UserController.getInstance(usersRepo);
   const usersRouter = new UserRouter(usersController, authInterceptor);
-  app.use('/users', usersRouter.router);
+  app.use('/user', usersRouter.router);
 
   const armyListRepo = new ArmyListRepo(prisma);
   const armyListController = ArmyListController.getInstance(armyListRepo);
@@ -49,7 +49,7 @@ export const startApp = (app: Express, prisma: PrismaClient) => {
   const matchParticipantRepo = new MatchParticipantRepo(prisma);
   const matchController = MatchController.getInstance(matchRepo, matchParticipantRepo);
   const matchRouter = new MatchRouter(matchController, authInterceptor);
-  app.use('/matches', matchRouter.router);
+  app.use('/match', matchRouter.router);
 
   const tournamentRepo = new TournamentRepo(prisma);
   const tournamentParticipantRepo = new TournamentParticipantRepo(prisma);
