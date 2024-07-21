@@ -16,6 +16,7 @@ export class MatchRouter {
 
     this.router.get('/', authInterceptor.authentication.bind(authInterceptor), controller.getAll.bind(controller));
     this.router.get('/:id', authInterceptor.authentication.bind(authInterceptor), controller.getById.bind(controller));
+    this.router.get('/participant/:participantId', authInterceptor.authentication.bind(authInterceptor), controller.readByParticipant.bind(controller));
 
     this.router.post(
       '/',

@@ -113,4 +113,23 @@ export class MatchRepo implements Repo<Match, MatchCreateDto> {
       select,
     });
   }
+
+  async readByParticipant(participantId: string): Promise<Match[]> {
+    const matches = await this.prisma.match.findMany({
+      where: {
+        participants: {
+          some: {
+            userId: participantId,
+          },
+        },
+      },
+      select,
+    });
+
+    if (!matches) {
+      throw new HttpError(404, 'Not Found', `Matches for participant ${participantId} not found`);
+    }
+
+    return matches;
+  }
 }

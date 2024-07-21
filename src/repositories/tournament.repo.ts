@@ -117,4 +117,25 @@ export class TournamentRepo implements Repo<Tournament, TournamentCreateDto> {
       select,
     });
   }
+
+  async readByParticipant(participantId: string): Promise<Tournament[]> {
+    const tournaments = await this.prisma.tournament.findMany({
+      where: {
+        participants: {
+          some: {
+            user: {
+              id: participantId
+            }
+          },
+        },
+      },
+      select,
+    });
+
+    if (!tournaments) {
+      throw new HttpError(404, 'Not Found', `Tournaments for participant ${participantId} not found`);
+    }
+
+    return tournaments;
+  }
 }

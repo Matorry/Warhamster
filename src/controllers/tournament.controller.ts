@@ -33,6 +33,22 @@ export class TournamentController extends BaseController<Tournament, TournamentC
     return TournamentController.instance;
   }
 
+  async readByParticipant(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { participantId } = req.params;
+
+      if (participantId === undefined) {
+        return res.status(400).json({ error: 'userId parameter is missing' });
+      }
+
+      const armyLists = await this.repo.readByParticipant(participantId)
+      res.json(armyLists)
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
   async addParticipant(req: Request, res: Response, next: NextFunction) {
     const { id } = req.params;
     const { userId, armyListId } = req.body
